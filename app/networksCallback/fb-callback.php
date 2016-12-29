@@ -1,6 +1,6 @@
 <?php
-include_once __DIR__ . '/src/config.php';
-include __DIR__ . '/src/lib/php-graph-sdk-5.0.0/src/Facebook/autoload.php';
+include_once __DIR__ . '/../../src/config.php';
+include __DIR__ . '/../../src/lib/php-graph-sdk-5.0.0/src/Facebook/autoload.php';
 
 if (!session_id()) {
     session_start();
@@ -26,4 +26,4 @@ if (isset($accessToken)) {
     $_SESSION['facebook_access_token'] = (string)$accessToken;
 }
 
-header('Location: ./index.php');
+header('Location: http://socpost.local/index.php');
