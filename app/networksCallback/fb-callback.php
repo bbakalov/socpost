@@ -1,16 +1,13 @@
 <?php
-include_once __DIR__ . '/../../src/config.php';
-include __DIR__ . '/../../src/lib/php-graph-sdk-5.0.0/src/Facebook/autoload.php';
+include_once __DIR__ . '/../../config.php';
+require_once HOME_DIR . '/app/autoload.php';
 
 if (!session_id()) {
     session_start();
 }
 
-$fb = new Facebook\Facebook(array(
-    'app_id' => FB_APP_ID,
-    'app_secret' => FB_APP_SECRET,
-    'default_graph_version' => 'v2.7'
-));
+$fb = new IndexController(['facebook']);
+$fb = $fb->getFacebookConnector();
 $helper = $fb->getRedirectLoginHelper();
 try {
     $accessToken = $helper->getAccessToken();

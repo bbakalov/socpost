@@ -1,19 +1,37 @@
 <?php
+include HOME_DIR . '/vendor/autoload.php';
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 class IndexController
 {
-
     protected $facebookConnector;
     protected $twitterConnector;
     protected $request;
 
     function __construct(array $networks)
     {
+        $connectors = [
+            'facebook' => new Facebook\Facebook(['app_id' => FB_APP_ID, 'app_secret' => FB_APP_SECRET, 'default_graph_version' => 'v2.7']),
+            'twitter' => new TwitterOAuth(CONSUMER_KEY_TW, CONSUMER_SECRET_TW),
+        ];
         $this->request = new RequestController();
-        foreach ($networks as $network => $connector) {
+        foreach ($networks as $network) {
             $connectorEntity = $network . 'Connector';
-            $this->{$connectorEntity} = $connector;
+            $this->{$connectorEntity} = $connectors[$network];
+        }
+    }
+
+    public function getFacebookConnector()
+    {
+        return $this->facebookConnector;
+    }
+
+    public function getTwitterConnector($oauthToken = null, $oauthTokenSecret = null)
+    {
+        if (!empty($oauthToken) && !empty($oauthTokenSecret)) {
+            return new TwitterOAuth(CONSUMER_KEY_TW, CONSUMER_SECRET_TW, $oauthToken, $oauthTokenSecret);
+        } else {
+            return $this->twitterConnector;
         }
     }
 

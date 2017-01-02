@@ -2,8 +2,8 @@
 session_start();
 var_dump($_SESSION);
 //session_destroy();die;
-include_once __DIR__ . '/src/config.php';
-include __DIR__ . '/src/lib/twitteroauth/autoload.php';
+include_once __DIR__ . '/config.php';
+include HOME_DIR . '/vendor/autoload.php';
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 define('CONSUMER_KEY', '7RJAtZ9xwl46Izdp2i2y1aDzv');
