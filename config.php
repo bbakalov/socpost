@@ -21,7 +21,10 @@ define('CONSUMER_SECRET_TW', 'SgOLdq3tnj9B3LQWnCTeOQyDtfONuQvunzI7FciMfzzEz8OpGd
 define('OAUTH_CALLBACK_TW', 'http://socpost.local/app/networksCallback/tw-callback.php');
 define('TW_LOG_PATH', '/var/www/nginx/socpost.local/logs/twitter.log');
 
-//$socNetStatus = [
-//    'facebook' => ['enabled' => true],
-//    'twitter' => ['enabled' => true],
-//];
+
+$socNetStatus = [
+    'facebook' => ['enabled' => true],
+    'twitter' => ['enabled' => true],
+];
+
+define('NETWORKS_INFO', $socNetStatus);

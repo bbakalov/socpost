@@ -1,6 +1,7 @@
 <?php
+namespace Bdn\Socpost\Controller;
 
-class RequestController
+class RequestOldController
 {
     /**
      * @var array
@@ -13,31 +14,44 @@ class RequestController
     /**
      * @var array
      */
-    public $parameters;
+    public $urlParameters;
+
     /**
      * @var bool
      */
-    public $isJson;
+
     public function __construct()
     {
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
+        echo '<pre>';
+//        var_dump($_SESSION);
+//        var_dump($_SERVER);
         if (isset($_SERVER['PATH_INFO'])) {
             $this->urlElements = explode('/', $_SERVER['PATH_INFO']);
         } else {
             $this->urlElements = array_filter(
                 explode('/', str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI'])));
         }
+
+        $urlParameters = [];
+        if (isset($_SERVER['QUERY_STRING'])) {
+            parse_str($_SERVER['QUERY_STRING'], $urlParameters);
+        }
+        $this->urlParameters = $urlParameters;
+//        var_dump($this->urlElements);
 //        $this->parseIncomingParams();
+//        var_dump($this);
 //        return true;
     }
+
     /**
-     * Parse incoming parameters
+     * Parse incoming urlParameters
      */
     public function parseIncomingParams()
     {
-        $parameters = array();
+        $urlParameters = [];
         if (isset($_SERVER['QUERY_STRING'])) {
-            parse_str($_SERVER['QUERY_STRING'], $parameters);
+            parse_str($_SERVER['QUERY_STRING'], $urlParameters);
         }
         $body = file_get_contents("php://input");
         $contentType = false;
@@ -46,11 +60,11 @@ class RequestController
         }
         $bodyParams = (!empty($body)) ? json_decode($body) : false;
         if ($contentType == 'application/json' && !is_null($bodyParams)) {
-            $parameters = json_decode($body, true);
+            $urlParameters = json_decode($body, true);
             $this->isJson = true;
         } else {
             $this->isJson = false;
         }
-        $this->parameters = $parameters;
+        $this->urlParameters = $urlParameters;
     }
 }

@@ -1,8 +1,10 @@
 <?php
+namespace Bdn\Socpost\Controller;
 include HOME_DIR . '/vendor/autoload.php';
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Facebook;
 
-class IndexController
+class IndexOldController extends RequestOldController
 {
     protected $facebookConnector;
     protected $twitterConnector;
@@ -10,15 +12,22 @@ class IndexController
 
     function __construct(array $networks)
     {
+        parent::__construct();
         $connectors = [
             'facebook' => new Facebook\Facebook(['app_id' => FB_APP_ID, 'app_secret' => FB_APP_SECRET, 'default_graph_version' => 'v2.7']),
             'twitter' => new TwitterOAuth(CONSUMER_KEY_TW, CONSUMER_SECRET_TW),
         ];
-        $this->request = new RequestController();
+
         foreach ($networks as $network) {
             $connectorEntity = $network . 'Connector';
             $this->{$connectorEntity} = $connectors[$network];
         }
+
+        var_dump($this->urlElements);
+        $controller = ucfirst($this->urlElements[1]) . 'Controller';
+        $action = $this->urlElements[2] . 'Action';
+        $controller = new $controller;
+        $controller->$action();
     }
 
     public function getFacebookConnector()

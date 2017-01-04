@@ -1,14 +1,14 @@
 <?php
-include_once __DIR__ . '/../../config.php';
-require_once HOME_DIR . '/app/autoload.php';
-
 if (!session_id()) {
     session_start();
 }
 
-$fb = new IndexController(['facebook']);
-$fb = $fb->getFacebookConnector();
-$helper = $fb->getRedirectLoginHelper();
+use Bdn\Socpost\Controller;
+include_once __DIR__ . '/../../config.php';
+require_once HOME_DIR . '/app/autoload.php';
+
+$fb = new Controller\FacebookController();
+$helper = $fb->getInstance()->getRedirectLoginHelper();
 try {
     $accessToken = $helper->getAccessToken();
 } catch (Facebook\Exceptions\FacebookResponseException $e) {
