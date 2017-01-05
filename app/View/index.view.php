@@ -4,47 +4,45 @@
     <link rel="shortcut icon" type="image/png" href="favicon.ico"/>
 </head>
 <body>
-<div>
-    <?php if (isset($_SESSION['msgToUser'])): ?>
-        <p><?php echo $_SESSION['msgToUser']; ?></p>
-    <?php endif; ?>
-
-</div>
-<div>
-    <?php if (!empty($twAccessToken)): ?>
-        <p>Logged in with Twitter</p>
-        <p style='font-size:smaller;'>TW AccessToken: <?php echo implode(' | ', $twAccessToken) ?></p>
-    <?php else: ?>
-        <p><a href="<?php echo $twLoginUrl; ?>">Log in with Twitter!</a></p>
-    <?php endif; ?>
-
-    <?php if (!empty($fbAccessToken)): ?>
-        <p>Logged in with Facebook</p>
-        <p style='font-size:smaller;'>FB AccessToken: <?php echo $fbAccessToken ?></p>
-    <?php else: ?>
-        <p><a href="<?php echo $fbLoginUrl; ?>">Log in with Facebook!</a></p>
-    <?php endif; ?>
-</div>
-<div>
-    <?php if (!empty($fbAccessToken)): ?>
-        Post to Facebook:
+<content>
+    <div>
+        <?php if (isset($_SESSION['msgToUser'])): ?>
+            <?php foreach ($_SESSION['msgToUser'] as $key => $val): ?>
+                <p><?php echo $key ?> | <?php echo $val ?></p>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+    <div>
         <form name="postFb" action="index/post" method="GET">
-            <input type="text" name="text" value="TestText<?php echo time() ?>">
-            <input type="hidden" name="net" value="facebook">
-            <br>
-            <input type="submit" value="PostFb">
+            <label for="networks"><b>Check social networks for posting:</b></label><br>
+            <?php if (!empty($fbAccessToken)): ?>
+                <input type="checkbox" name="networks[]" id="networks" value="facebook">Facebook<br>
+            <?php else: ?>
+                <p><a href="<?php echo $fbLoginUrl; ?>">For posting to Facebook, please logging in.</a></p>
+            <?php endif; ?>
+            <?php if (!empty($twAccessToken)): ?>
+                <input type="checkbox" name="networks[]" id="networks" value="twitter">Twitter<br>
+            <?php else: ?>
+                <p><a href="<?php echo $twLoginUrl; ?>">For posting to Twitter, please logging in.</a></p>
+            <?php endif; ?>
+            <textarea rows="5" cols="25" name="text" placeholder="Enter post text here"
+                      required style="resize: none;">TestText<?php echo time() ?></textarea><br>
+            <input type="submit" value="Post">
         </form>
-    <?php endif; ?>
-
-    <?php if (!empty($twAccessToken)): ?>
-        Post to Twitter:
-        <form name="postTw" action="index/post" method="GET">
-            <input type="text" name="text" value="TestText<?php echo time() ?>">
-            <input type="hidden" name="net" value="twitter">
-            <br>
-            <input type="submit" value="PostTw">
-        </form>
-    <?php endif; ?>
-</div>
+    </div>
+</content>
 </body>
+<footer>
+    <div>
+        <?php if (!empty($twAccessToken)): ?>
+            <p>Logged in with Twitter</p>
+            <p style='font-size:smaller;'>TW AccessToken: <?php echo implode(' | ', $twAccessToken) ?></p>
+        <?php endif; ?>
+
+        <?php if (!empty($fbAccessToken)): ?>
+            <p>Logged in with Facebook</p>
+            <p style='font-size:smaller;'>FB AccessToken: <?php echo $fbAccessToken ?></p>
+        <?php endif; ?>
+    </div>
+</footer>
 </html>

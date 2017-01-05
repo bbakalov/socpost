@@ -41,29 +41,18 @@ class IndexController extends Core\CoreController
 
     public function postAction()
     {
-        echo __FUNCTION__;
-        //TODO: make one push button for sending message to social network
-        if (!empty($_GET['text']) && !empty($_GET['net'])) {
-            $socNetwork = $_GET['net'];
+        if (!empty($_GET['text']) && !empty($_GET['networks'])) {
+            $res = [];
+            $socNetworks = $_GET['networks'];
             $msg = $_GET['text'];
-            switch ($socNetwork) {
-                case 'facebook':
-                    $msg = ['message' => (string)$msg];
-                    $res = $this->facebookConnector->post($msg);
-                    header('Location: http://socpost.local/index.php');
-                    break;
-                case 'twitter':
-                    $msg = ['status' => $msg];
-                    $res = $this->twitterConnector->post($msg);
-                    header('Location: http://socpost.local/index.php');
-                    break;
-                default:
-                    $res = 'switch went wrong';
-                    break;
+            foreach ($socNetworks as $network) {
+                $result = $this->{"{$network}Connector"}->post($msg);
+                $res[$network] = $result;
             }
-
-            $_SESSION['msgToUser'] = "$socNetwork : $res";
-            $this->indexAction();
+            $_SESSION['msgToUser'] = $res;
+        } else {
+            $_SESSION['msgToUser'] = ['General' => 'Please Logging in to social networks OR choose one of networks for posting!'];
         }
+        header('Location: http://socpost.local/index.php');
     }
 }

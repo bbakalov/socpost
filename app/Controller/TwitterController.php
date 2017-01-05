@@ -45,6 +45,7 @@ class TwitterController extends Core\NetworksController
     public function post($msg)
     {
         if (!empty($msg)) {
+            $msg = ['status' => $msg];
             try {
                 $response = $this->instance->post('statuses/update', $msg);
                 if (isset($response->errors)) {

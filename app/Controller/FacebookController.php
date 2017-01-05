@@ -46,6 +46,7 @@ class FacebookController extends Core\NetworksController
     public function post($msg)
     {
         if (!empty($msg)) {
+            $msg = ['message' => (string)$msg];
             try {
                 $response = $this->instance->post('/me/feed', $msg, $this->instance->getDefaultAccessToken());
                 $responseBody = $response->getDecodedBody();
